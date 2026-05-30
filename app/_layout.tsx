@@ -1,6 +1,8 @@
-import { useEffect } from 'react'
-import { Stack, router, useSegments } from 'expo-router'
-import { useAuthStore, initializeAuth } from '../src/stores/authStore'
+import { useEffect } from 'react';
+import { Stack, router, useSegments } from 'expo-router';
+import { useAuthStore, initializeAuth } from '../src/stores/authStore';
+import { ThemeProvider } from 'styled-components/native';
+import { theme } from '../src/design/theme';
 
 /**
  * Route guard. Runs on every navigation and after auth state changes.
@@ -30,7 +32,7 @@ function RouteGuard() {
 
     // Logged in but onboarding not complete → onboarding flow
     if (!profile.onboarding_complete) {
-      const isOnRoleSelect = segments[1] === 'role-select'
+      const isOnRoleSelect = (segments as string[])[1] === 'role-select'
       if (!inOnboarding || isOnRoleSelect) {
         // -----------------------------------------------------------------
         // NEW: make sure we never call router.replace(undefined)
@@ -77,9 +79,11 @@ export default function RootLayout() {
   }, [])
 
   return (
-    <>
-      <RouteGuard />
-      <Stack screenOptions={{ headerShown: false }} />
-    </>
+    <ThemeProvider theme={theme}>
+      <>
+        <RouteGuard />
+        <Stack screenOptions={{ headerShown: false }} />
+      </>
+    </ThemeProvider>
   )
 }

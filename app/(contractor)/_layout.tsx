@@ -1,11 +1,12 @@
 import { Tabs } from 'expo-router'
 import { View, Text, StyleSheet } from 'react-native'
-import { Colors, Typography } from '../../src/constants/theme'
+import { Ionicons } from '@expo/vector-icons'
+import { Colors, Typography, Radius, Shadow, Spacing } from '../../src/constants/theme'
 
-function TabIcon({ emoji, label, focused }: { emoji: string; label: string; focused: boolean }) {
+function TabIcon({ iconName, label, focused }: { iconName: keyof typeof Ionicons.glyphMap; label: string; focused: boolean }) {
   return (
     <View style={styles.iconWrap}>
-      <Text style={styles.emoji}>{emoji}</Text>
+      <Ionicons name={iconName} size={22} color={focused ? Colors.primary : Colors.textMuted} />
       <Text style={[styles.label, focused && styles.labelActive]}>{label}</Text>
     </View>
   )
@@ -25,19 +26,19 @@ export default function ContractorLayout() {
       <Tabs.Screen
         name="home"
         options={{
-          tabBarIcon: ({ focused }) => <TabIcon emoji="🔍" label="मज़दूर" focused={focused} />,
+          tabBarIcon: ({ focused }) => <TabIcon iconName={focused ? "search" : "search-outline"} label="मज़दूर" focused={focused} />,
         }}
       />
       <Tabs.Screen
         name="bookings"
         options={{
-          tabBarIcon: ({ focused }) => <TabIcon emoji="📋" label="बुकिंग" focused={focused} />,
+          tabBarIcon: ({ focused }) => <TabIcon iconName={focused ? "document-text" : "document-text-outline"} label="बुकिंग" focused={focused} />,
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
-          tabBarIcon: ({ focused }) => <TabIcon emoji="👤" label="प्रोफ़ाइल" focused={focused} />,
+          tabBarIcon: ({ focused }) => <TabIcon iconName={focused ? "person" : "person-outline"} label="प्रोफ़ाइल" focused={focused} />,
         }}
       />
       {/* Hidden screens */}
@@ -50,15 +51,21 @@ export default function ContractorLayout() {
 
 const styles = StyleSheet.create({
   tabBar: {
+    position: 'absolute',
+    bottom: 24,
+    left: 20,
+    right: 20,
     backgroundColor: Colors.white,
-    borderTopWidth: 1,
-    borderTopColor: Colors.borderLight,
-    height: 64,
-    paddingBottom: 8,
-    paddingTop: 6,
+    borderRadius: Radius.xl,
+    height: 72,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    ...Shadow.md,
+    paddingBottom: 10,
+    paddingTop: 10,
   },
-  iconWrap: { alignItems: 'center', gap: 2 },
+  iconWrap: { alignItems: 'center', gap: 3 },
   emoji: { fontSize: 22 },
   label: { fontSize: Typography.xs, color: Colors.textMuted, fontWeight: Typography.medium },
-  labelActive: { color: Colors.black, fontWeight: Typography.bold },
+  labelActive: { color: Colors.primary, fontWeight: Typography.bold },
 })

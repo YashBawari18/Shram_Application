@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
-import { Colors, Spacing, Radius, Typography } from '../../constants/theme'
+import { Colors, Typography, Spacing, Radius } from '../../design/theme';
 
 interface StepIndicatorProps {
   current: number
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   },
   dotActive: {
     borderColor: Colors.primary,
-    backgroundColor: Colors.primaryLight,
+    backgroundColor: Colors.surface,
   },
   dotDone: {
     borderColor: Colors.primary,
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     borderRadius: Radius.full,
     backgroundColor: Colors.primary,
   },
-  check: { fontSize: 13, fontWeight: Typography.bold, color: Colors.black },
+  check: { fontSize: 13, fontWeight: Typography.bold, color: Colors.white },
   line: { width: 32, height: 2, backgroundColor: Colors.border, marginHorizontal: 2 },
   lineDone: { backgroundColor: Colors.primary },
   label: {

@@ -16,6 +16,7 @@ import { Button } from '../../src/components/ui/Button'
 import { TextInput } from '../../src/components/ui/TextInput'
 import { StepIndicator } from '../../src/components/ui/StepIndicator'
 import { Colors, Typography, Spacing, Radius } from '../../src/constants/theme'
+import { Ionicons } from '@expo/vector-icons'
 
 const STEPS = ['परिचय', 'कंपनी']
 
@@ -26,11 +27,11 @@ const LANG_OPTIONS = [
 ]
 
 // What type of hirer are you?
-const HIRER_TYPES = [
-  { key: 'contractor', label: 'ठेकेदार', sub: 'Contractor', emoji: '👷' },
-  { key: 'builder',    label: 'बिल्डर',   sub: 'Builder',    emoji: '🏗️' },
-  { key: 'supervisor', label: 'सुपरवाइज़र', sub: 'Supervisor', emoji: '📋' },
-  { key: 'homeowner',  label: 'घर मालिक', sub: 'Homeowner',  emoji: '🏠' },
+const HIRER_TYPES: { key: string; label: string; sub: string; iconName: keyof typeof Ionicons.glyphMap }[] = [
+  { key: 'contractor', label: 'ठेकेदार', sub: 'Contractor', iconName: 'hammer-outline' },
+  { key: 'builder',    label: 'बिल्डर',   sub: 'Builder',    iconName: 'business-outline' },
+  { key: 'supervisor', label: 'सुपरवाइज़र', sub: 'Supervisor', iconName: 'document-text-outline' },
+  { key: 'homeowner',  label: 'घर मालिक', sub: 'Homeowner',  iconName: 'home-outline' },
 ]
 
 export default function ContractorOnboardScreen() {
@@ -125,7 +126,7 @@ export default function ContractorOnboardScreen() {
         <View style={styles.footer}>
           {step > 0 && (
             <Button
-              label="← पीछे"
+              label="पीछे"
               onPress={() => { setStep(0); setErrors({}) }}
               variant="secondary"
               fullWidth={false}
@@ -134,10 +135,10 @@ export default function ContractorOnboardScreen() {
           )}
           <View style={styles.footerMain}>
             {step === 0 ? (
-              <Button label="आगे बढ़ें →" onPress={handleNext} />
+              <Button label="आगे बढ़ें" onPress={handleNext} />
             ) : (
               <Button
-                label="✓ प्रोफ़ाइल बनाएं"
+                label="प्रोफ़ाइल बनाएं"
                 onPress={handleSubmit}
                 loading={loading}
               />
@@ -153,7 +154,7 @@ export default function ContractorOnboardScreen() {
 function StepZero({ name, setName, language, setLanguage, hirerType, setHirerType, errors }: any) {
   return (
     <View>
-      <Text style={styles.stepTitle}>आप कौन हैं? 🏗️</Text>
+      <Text style={styles.stepTitle}>आप कौन हैं?</Text>
       <Text style={styles.stepSub}>मज़दूरों को आपकी पहचान दिखेगी</Text>
 
       <TextInput
@@ -175,7 +176,7 @@ function StepZero({ name, setName, language, setLanguage, hirerType, setHirerTyp
             onPress={() => setHirerType(t.key)}
             style={[styles.typeCard, hirerType === t.key && styles.typeCardActive]}
           >
-            <Text style={styles.typeEmoji}>{t.emoji}</Text>
+            <Ionicons name={t.iconName} size={30} color={hirerType === t.key ? Colors.primary : Colors.textMuted} />
             <Text style={[styles.typeLabel, hirerType === t.key && styles.typeLabelActive]}>
               {t.label}
             </Text>
@@ -206,7 +207,7 @@ function StepZero({ name, setName, language, setLanguage, hirerType, setHirerTyp
 function StepOne({ companyName, setCompanyName, gstNumber, setGstNumber }: any) {
   return (
     <View>
-      <Text style={styles.stepTitle}>कंपनी की जानकारी 📋</Text>
+      <Text style={styles.stepTitle}>कंपनी की जानकारी</Text>
       <Text style={styles.stepSub}>यह ज़रूरी नहीं है — चाहें तो छोड़ सकते हैं</Text>
 
       <TextInput
@@ -231,9 +232,12 @@ function StepOne({ companyName, setCompanyName, gstNumber, setGstNumber }: any) 
 
       {/* Trust building callout */}
       <View style={styles.trustCard}>
-        <Text style={styles.trustTitle}>✓ आपका प्रोफ़ाइल कैसा दिखेगा</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: Spacing.sm }}>
+          <Ionicons name="checkmark-circle-outline" size={16} color={Colors.white} />
+          <Text style={styles.trustTitle}>आपका प्रोफ़ाइल कैसा दिखेगा</Text>
+        </View>
         <View style={styles.trustRow}>
-          <Text style={styles.trustIcon}>🏗️</Text>
+          <Ionicons name="business-outline" size={36} color={Colors.white} />
           <View>
             <Text style={styles.trustName}>{companyName || 'आपकी कंपनी'}</Text>
             <Text style={styles.trustMeta}>
@@ -269,7 +273,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  logoText: { fontSize: 18, fontWeight: Typography.black, color: Colors.black },
+  logoText: { fontSize: 18, fontWeight: Typography.black, color: Colors.white },
   topTitle: { fontSize: Typography.base, fontWeight: Typography.semibold, color: Colors.textPrimary },
 
   scroll: { paddingHorizontal: Spacing['2xl'], paddingBottom: Spacing['2xl'] },
@@ -325,7 +329,7 @@ const styles = StyleSheet.create({
     fontWeight: Typography.semibold,
     color: Colors.textPrimary,
   },
-  typeLabelActive: { color: Colors.black },
+  typeLabelActive: { color: Colors.primary },
   typeSub: { fontSize: Typography.xs, color: Colors.textMuted },
 
   langRow: { flexDirection: 'row', gap: Spacing.sm },
@@ -343,21 +347,21 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primaryLight,
   },
   langText: { fontSize: Typography.base, fontWeight: Typography.medium, color: Colors.textSecondary },
-  langTextActive: { color: Colors.black, fontWeight: Typography.bold },
+  langTextActive: { color: Colors.primary, fontWeight: Typography.bold },
 
   trustCard: {
-    backgroundColor: Colors.black,
+    backgroundColor: Colors.primary,
     borderRadius: Radius.xl,
     padding: Spacing.xl,
     marginTop: Spacing.base,
     gap: Spacing.sm,
   },
-  trustTitle: { fontSize: Typography.sm, color: Colors.primary, fontWeight: Typography.semibold },
+  trustTitle: { fontSize: Typography.sm, color: Colors.white, fontWeight: Typography.semibold },
   trustRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.md },
   trustIcon: { fontSize: 36 },
   trustName: { fontSize: Typography.base, fontWeight: Typography.bold, color: Colors.white },
-  trustMeta: { fontSize: Typography.xs, color: Colors.textMuted },
-  trustNote: { fontSize: Typography.xs, color: Colors.textMuted, lineHeight: Typography.xs * 1.6 },
+  trustMeta: { fontSize: Typography.xs, color: Colors.border },
+  trustNote: { fontSize: Typography.xs, color: Colors.border, lineHeight: Typography.xs * 1.6 },
 
   footer: {
     flexDirection: 'row',

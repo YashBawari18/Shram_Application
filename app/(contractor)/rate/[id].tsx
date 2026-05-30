@@ -9,6 +9,7 @@ import { useAuthStore } from '../../../src/stores/authStore'
 import { fetchBookingWithProfiles } from '../../../src/lib/booking'
 import { Button } from '../../../src/components/ui/Button'
 import { Colors, Typography, Spacing, Radius } from '../../../src/constants/theme'
+import { Ionicons } from '@expo/vector-icons'
 
 const LABELS = ['', 'बहुत खराब', 'खराब', 'ठीक है', 'अच्छा', 'बहुत अच्छा']
 
@@ -48,7 +49,7 @@ export default function ContractorRateScreen() {
       return
     }
 
-    Alert.alert('✓ रेटिंग दे दी!', 'शुक्रिया।', [
+    Alert.alert('रेटिंग दे दी!', 'शुक्रिया।', [
       { text: 'ठीक है', onPress: () => router.replace('/(contractor)/home' as any) }
     ])
   }
@@ -56,13 +57,13 @@ export default function ContractorRateScreen() {
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.container}>
-        <Text style={styles.title}>मज़दूर को रेटिंग दें ⭐</Text>
+        <Text style={styles.title}>मज़दूर को रेटिंग दें</Text>
         <Text style={styles.sub}>काम कैसा था?</Text>
 
         <View style={styles.stars}>
           {[1, 2, 3, 4, 5].map(i => (
             <TouchableOpacity key={i} onPress={() => setScore(i)} style={styles.starBtn}>
-              <Text style={[styles.star, i <= score && styles.starActive]}>★</Text>
+              <Ionicons name={i <= score ? "star" : "star-outline"} size={48} color={i <= score ? Colors.primary : Colors.border} />
             </TouchableOpacity>
           ))}
         </View>

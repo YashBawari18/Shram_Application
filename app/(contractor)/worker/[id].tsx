@@ -7,10 +7,11 @@ import { useLocalSearchParams, router } from 'expo-router'
 import { supabase } from '../../../src/lib/supabase'
 import { createBooking } from '../../../src/lib/booking'
 import { useAuthStore } from '../../../src/stores/authStore'
-import { getSkillLabel, SKILL_MAP } from '../../../src/constants/skills'
+import { getSkillLabel, SKILL_MAP, SKILL_ICONS } from '../../../src/constants/skills'
 import { Button } from '../../../src/components/ui/Button'
 import { Colors, Typography, Spacing, Radius, Shadow } from '../../../src/constants/theme'
 import { Skill } from '../../../src/types/app'
+import { Ionicons } from '@expo/vector-icons'
 
 export default function WorkerDetailScreen() {
   const { id, hire } = useLocalSearchParams<{ id: string; hire?: string }>()
@@ -71,8 +72,9 @@ export default function WorkerDetailScreen() {
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
-          <Text style={styles.backText}>← वापस</Text>
+        <TouchableOpacity onPress={() => router.back()} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+          <Ionicons name="arrow-back" size={20} color={Colors.textSecondary} />
+          <Text style={styles.backText}>वापस</Text>
         </TouchableOpacity>
       </View>
 
@@ -82,24 +84,35 @@ export default function WorkerDetailScreen() {
           <View style={styles.avatarLg}>
             <Text style={styles.avatarInitial}>{worker.name?.charAt(0)}</Text>
           </View>
-          {availability?.is_online && <View style={styles.onlineBadge}><Text style={styles.onlineBadgeText}>🟢 ऑनलाइन</Text></View>}
+          {availability?.is_online && (
+            <View style={styles.onlineBadge}>
+              <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: Colors.success, marginRight: 4 }} />
+              <Text style={styles.onlineBadgeText}>ऑनलाइन</Text>
+            </View>
+          )}
           <Text style={styles.workerName}>{worker.name}</Text>
-          <Text style={styles.skillLabel}>{skill?.emoji} {getSkillLabel(worker.skill, 'hi')}</Text>
-          <Text style={styles.location}>📍 {availability?.location_name ?? 'Location unavailable'}</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+            <Ionicons name={(SKILL_ICONS[worker.skill as Skill] ?? 'hammer-outline') as any} size={16} color={Colors.textSecondary} />
+            <Text style={styles.skillLabel}>{getSkillLabel(worker.skill, 'hi')}</Text>
+          </View>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 2 }}>
+            <Ionicons name="location-outline" size={14} color={Colors.textMuted} />
+            <Text style={styles.location}>{availability?.location_name ?? 'Location unavailable'}</Text>
+          </View>
         </View>
 
         {/* Stats row */}
         <View style={styles.statsRow}>
           <StatBox label="दिहाड़ी" value={`₹${wage.toLocaleString('en-IN')}`} sub="आज" />
-          <StatBox label="रेटिंग" value={worker.avg_rating > 0 ? worker.avg_rating.toFixed(1) : 'New'} sub="⭐" />
-          <StatBox label="कुल काम" value={String(worker.total_jobs)} sub="jobs" />
+          <StatBox label="रेटिंग" value={worker.avg_rating > 0 ? worker.avg_rating.toFixed(1) : 'New'} sub="स्टार" iconName="star" />
+          <StatBox label="कुल काम" value={String(worker.total_jobs)} sub="काम" />
           <StatBox label="अनुभव" value={`${worker.experience_years}+`} sub="साल" />
         </View>
 
         {/* Hire form */}
         {showHireSheet ? (
           <View style={styles.hireCard}>
-            <Text style={styles.hireTitle}>📋 बुकिंग रिक्वेस्ट भेजें</Text>
+            <Text style={styles.hireTitle}>बुकिंग रिक्वेस्ट भेजें</Text>
             <Text style={styles.hireWage}>दिहाड़ी: ₹{wage.toLocaleString('en-IN')} / दिन</Text>
 
             <Text style={styles.fieldLabel}>काम की जगह का पता *</Text>
@@ -125,24 +138,30 @@ export default function WorkerDetailScreen() {
             />
 
             <View style={styles.warningBox}>
-              <Text style={styles.warningText}>⏱ यह रिक्वेस्ट 5 मिनट में expire हो जाएगी</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                <Ionicons name="time-outline" size={16} color={Colors.warning} />
+                <Text style={styles.warningText}>यह रिक्वेस्ट 5 मिनट में expire हो जाएगी</Text>
+              </View>
             </View>
 
-            <Button label="✓ रिक्वेस्ट भेजें" onPress={handleHire} loading={hiring} />
+            <Button label="रिक्वेस्ट भेजें" onPress={handleHire} loading={hiring} />
             <Button label="रद्द करें" onPress={() => setShowHireSheet(false)} variant="ghost" style={{ marginTop: Spacing.sm }} />
           </View>
         ) : (
-          <Button label={`${skill?.emoji ?? ''} अभी Hire करें — ₹${wage.toLocaleString('en-IN')}/दिन`} onPress={() => setShowHireSheet(true)} style={styles.hireCta} />
+          <Button label={`अभी Hire करें — ₹${wage.toLocaleString('en-IN')}/दिन`} onPress={() => setShowHireSheet(true)} style={styles.hireCta} />
         )}
       </ScrollView>
     </SafeAreaView>
   )
 }
 
-function StatBox({ label, value, sub }: { label: string; value: string; sub: string }) {
+function StatBox({ label, value, sub, iconName }: { label: string; value: string; sub: string; iconName?: keyof typeof Ionicons.glyphMap }) {
   return (
     <View style={styles.statBox}>
-      <Text style={styles.statValue}>{value}</Text>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
+        {iconName && <Ionicons name={iconName} size={14} color={Colors.primary} />}
+        <Text style={styles.statValue}>{value}</Text>
+      </View>
       <Text style={styles.statSub}>{sub}</Text>
       <Text style={styles.statLabel}>{label}</Text>
     </View>
@@ -156,9 +175,9 @@ const styles = StyleSheet.create({
   backText: { fontSize: Typography.base, color: Colors.textSecondary, fontWeight: Typography.medium },
   scroll: { padding: Spacing['2xl'], gap: Spacing.xl },
   hero: { alignItems: 'center', gap: Spacing.sm },
-  avatarLg: { width: 88, height: 88, borderRadius: Radius.full, backgroundColor: Colors.primaryLight, alignItems: 'center', justifyContent: 'center', ...Shadow.md },
-  avatarInitial: { fontSize: 40, fontWeight: Typography.bold, color: Colors.black },
-  onlineBadge: { backgroundColor: Colors.successLight, paddingHorizontal: Spacing.md, paddingVertical: 3, borderRadius: Radius.full },
+  avatarLg: { width: 88, height: 88, borderRadius: Radius.full, backgroundColor: Colors.primary, alignItems: 'center', justifyContent: 'center', ...Shadow.md },
+  avatarInitial: { fontSize: 40, fontWeight: Typography.bold, color: Colors.white },
+  onlineBadge: { flexDirection: 'row', alignItems: 'center', backgroundColor: Colors.successLight, paddingHorizontal: Spacing.md, paddingVertical: 3, borderRadius: Radius.full },
   onlineBadgeText: { fontSize: Typography.sm, fontWeight: Typography.medium, color: Colors.success },
   workerName: { fontSize: Typography['2xl'], fontWeight: Typography.black, color: Colors.black },
   skillLabel: { fontSize: Typography.base, color: Colors.textSecondary },

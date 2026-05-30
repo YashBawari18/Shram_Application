@@ -19,6 +19,7 @@ import { SkillPicker } from '../../src/components/ui/SkillPicker'
 import { WageSlider } from '../../src/components/ui/WageSlider'
 import { StepIndicator } from '../../src/components/ui/StepIndicator'
 import { Colors, Typography, Spacing, Radius, Shadow } from '../../src/constants/theme'
+import { Ionicons } from '@expo/vector-icons'
 
 const STEPS = ['परिचय', 'हुनर', 'दिहाड़ी']
 
@@ -144,7 +145,7 @@ export default function WorkerOnboardScreen() {
         <View style={styles.footer}>
           {step > 0 && (
             <Button
-              label="← पीछे"
+              label="पीछे"
               onPress={handleBack}
               variant="secondary"
               fullWidth={false}
@@ -153,10 +154,10 @@ export default function WorkerOnboardScreen() {
           )}
           <View style={styles.footerMain}>
             {step < 2 ? (
-              <Button label="आगे बढ़ें →" onPress={handleNext} />
+              <Button label="आगे बढ़ें" onPress={handleNext} />
             ) : (
               <Button
-                label="✓ प्रोफ़ाइल बनाएं"
+                label="प्रोफ़ाइल बनाएं"
                 onPress={handleSubmit}
                 loading={loading}
               />
@@ -172,7 +173,7 @@ export default function WorkerOnboardScreen() {
 function StepZero({ name, setName, language, setLanguage, errors }: any) {
   return (
     <View>
-      <Text style={styles.stepTitle}>आपका नाम क्या है? 👋</Text>
+      <Text style={styles.stepTitle}>आपका नाम क्या है?</Text>
       <Text style={styles.stepSub}>यह नाम कॉन्ट्रैक्टर को दिखेगा</Text>
 
       <TextInput
@@ -207,7 +208,7 @@ function StepZero({ name, setName, language, setLanguage, errors }: any) {
 function StepOne({ skill, setSkill, errors }: any) {
   return (
     <View>
-      <Text style={styles.stepTitle}>आपका हुनर क्या है? 🔧</Text>
+      <Text style={styles.stepTitle}>आपका हुनर क्या है?</Text>
       <Text style={styles.stepSub}>जो काम आप सबसे अच्छा करते हैं</Text>
       <SkillPicker
         selected={skill}
@@ -222,7 +223,7 @@ function StepOne({ skill, setSkill, errors }: any) {
 function StepTwo({ wage, setWage, experienceYears, setExperienceYears }: any) {
   return (
     <View>
-      <Text style={styles.stepTitle}>आज की दिहाड़ी कितनी? 💰</Text>
+      <Text style={styles.stepTitle}>आज की दिहाड़ी कितनी?</Text>
       <Text style={styles.stepSub}>स्लाइडर खींचकर दिहाड़ी सेट करें</Text>
 
       <WageSlider value={wage} onChange={setWage} label="आज की दिहाड़ी" />
@@ -247,7 +248,10 @@ function StepTwo({ wage, setWage, experienceYears, setExperienceYears }: any) {
 
       {/* Preview card */}
       <View style={styles.previewCard}>
-        <Text style={styles.previewTitle}>✓ यह दिखेगा कॉन्ट्रैक्टर को</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: Spacing.xs }}>
+          <Ionicons name="checkmark-circle-outline" size={16} color={Colors.white} />
+          <Text style={styles.previewTitle}>यह दिखेगा कॉन्ट्रैक्टर को</Text>
+        </View>
         <Text style={styles.previewWage}>₹{wage.toLocaleString('en-IN')} / दिन</Text>
         <Text style={styles.previewExp}>
           अनुभव: {EXP_OPTIONS.find(e => e.value === experienceYears)?.label}
@@ -277,7 +281,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  logoText: { fontSize: 18, fontWeight: Typography.black, color: Colors.black },
+  logoText: { fontSize: 18, fontWeight: Typography.black, color: Colors.white },
   topTitle: { fontSize: Typography.base, fontWeight: Typography.semibold, color: Colors.textPrimary },
 
   scroll: { paddingHorizontal: Spacing['2xl'], paddingBottom: Spacing['2xl'] },
@@ -317,7 +321,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primaryLight,
   },
   langText: { fontSize: Typography.base, fontWeight: Typography.medium, color: Colors.textSecondary },
-  langTextActive: { color: Colors.black, fontWeight: Typography.bold },
+  langTextActive: { color: Colors.primary, fontWeight: Typography.bold },
 
   expGrid: {
     flexDirection: 'row',
@@ -344,20 +348,20 @@ const styles = StyleSheet.create({
     fontWeight: Typography.semibold,
     color: Colors.textPrimary,
   },
-  expLabelActive: { color: Colors.black },
+  expLabelActive: { color: Colors.primary },
   expSub: { fontSize: Typography.xs, color: Colors.textMuted, marginTop: 2 },
-  expSubActive: { color: Colors.textSecondary },
+  expSubActive: { color: Colors.primary },
 
   previewCard: {
-    backgroundColor: Colors.black,
+    backgroundColor: Colors.primary,
     borderRadius: Radius.xl,
     padding: Spacing.xl,
     alignItems: 'center',
     gap: Spacing.xs,
   },
-  previewTitle: { fontSize: Typography.sm, color: Colors.primary, fontWeight: Typography.semibold },
+  previewTitle: { fontSize: Typography.sm, color: Colors.white, fontWeight: Typography.semibold },
   previewWage: { fontSize: Typography['2xl'], fontWeight: Typography.black, color: Colors.white },
-  previewExp: { fontSize: Typography.sm, color: Colors.textMuted },
+  previewExp: { fontSize: Typography.sm, color: Colors.border },
 
   footer: {
     flexDirection: 'row',

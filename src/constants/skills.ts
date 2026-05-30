@@ -22,6 +22,18 @@ export const SKILLS: SkillMeta[] = [
 
 export const SKILL_MAP = Object.fromEntries(SKILLS.map(s => [s.key, s])) as Record<Skill, SkillMeta>
 
+export const SKILL_ICONS: Record<Skill, string> = {
+  painter: 'brush-outline',
+  helper: 'people-outline',
+  mason: 'construct-outline',
+  electrician: 'flash',
+  plumber: 'water-outline',
+  carpenter: 'hammer-outline',
+  tile_worker: 'grid-outline',
+  welder: 'flame-outline',
+  construction_laborer: 'hammer-outline',
+}
+
 export function getSkillLabel(skill: Skill, lang: 'en' | 'hi' | 'mr' = 'hi'): string {
   const meta = SKILL_MAP[skill]
   if (!meta) return skill

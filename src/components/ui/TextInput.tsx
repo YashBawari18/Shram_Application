@@ -7,7 +7,7 @@ import {
   TextInputProps,
   TouchableOpacity,
 } from 'react-native'
-import { Colors, Typography, Spacing, Radius } from '../../constants/theme'
+import { Colors, Typography, Spacing, Radius } from '../../design/theme'
 
 interface InputProps extends TextInputProps {
   label?: string
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: Colors.surfaceSecondary,
-    borderRadius: Radius.md,
+    borderRadius: Radius.xl,
     borderWidth: 1.5,
     borderColor: Colors.border,
     paddingHorizontal: Spacing.base,

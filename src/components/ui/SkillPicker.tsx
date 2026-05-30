@@ -4,11 +4,23 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  ScrollView,
 } from 'react-native'
+import { Ionicons } from '@expo/vector-icons'
 import { SKILLS } from '../../constants/skills'
 import { Skill } from '../../types/app'
-import { Colors, Typography, Spacing, Radius } from '../../constants/theme'
+import { Colors, Typography, Spacing, Radius } from '../../design/theme';
+
+const SKILL_ICONS: Record<string, keyof typeof Ionicons.glyphMap> = {
+  painter: 'brush-outline',
+  helper: 'hammer-outline',
+  mason: 'business-outline',
+  electrician: 'flash-outline',
+  plumber: 'water-outline',
+  carpenter: 'construct-outline',
+  tile_worker: 'grid-outline',
+  welder: 'flame-outline',
+  construction_laborer: 'build-outline',
+}
 
 interface SkillPickerProps {
   selected: Skill | null
@@ -31,7 +43,11 @@ export function SkillPicker({ selected, onSelect, label, error }: SkillPickerPro
               activeOpacity={0.75}
               style={[styles.chip, isSelected && styles.chipSelected]}
             >
-              <Text style={styles.emoji}>{skill.emoji}</Text>
+              <Ionicons
+                name={SKILL_ICONS[skill.key] || 'construct-outline'}
+                size={26}
+                color={isSelected ? Colors.white : Colors.primary}
+              />
               <Text style={[styles.labelHi, isSelected && styles.labelHiSelected]}>
                 {skill.label_hi}
               </Text>
@@ -74,22 +90,21 @@ const styles = StyleSheet.create({
   },
   chipSelected: {
     borderColor: Colors.primary,
-    backgroundColor: Colors.primaryLight,
+    backgroundColor: Colors.primary,
   },
-  emoji: { fontSize: 28 },
   labelHi: {
     fontSize: Typography.sm,
     fontWeight: Typography.semibold,
     color: Colors.textPrimary,
     textAlign: 'center',
   },
-  labelHiSelected: { color: Colors.black },
+  labelHiSelected: { color: Colors.white },
   labelEn: {
     fontSize: Typography.xs,
     color: Colors.textMuted,
     textAlign: 'center',
   },
-  labelEnSelected: { color: Colors.textSecondary },
+  labelEnSelected: { color: Colors.border },
   error: {
     fontSize: Typography.xs,
     color: Colors.error,

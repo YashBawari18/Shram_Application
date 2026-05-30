@@ -4,6 +4,7 @@ import {
   TouchableOpacity, Alert,
 } from 'react-native'
 import { router } from 'expo-router'
+import { Ionicons } from '@expo/vector-icons'
 import { supabase } from '../../src/lib/supabase'
 import { useAuthStore } from '../../src/stores/authStore'
 import { signOut } from '../../src/lib/auth'
@@ -76,9 +77,9 @@ export default function WorkerProfile() {
 
         {/* Stats */}
         <View style={styles.statsRow}>
-          <StatBox emoji="⭐" value={avgRating > 0 ? avgRating.toFixed(1) : '—'} label="रेटिंग" />
-          <StatBox emoji="💼" value={String(totalJobs)} label="कुल काम" />
-          <StatBox emoji="💰" value={workerProfile?.daily_wage ? `₹${workerProfile.daily_wage}` : '—'} label="दिहाड़ी" />
+          <StatBox iconName="star-outline" value={avgRating > 0 ? avgRating.toFixed(1) : '—'} label="रेटिंग" />
+          <StatBox iconName="briefcase-outline" value={String(totalJobs)} label="कुल काम" />
+          <StatBox iconName="wallet-outline" value={workerProfile?.daily_wage ? `₹${workerProfile.daily_wage}` : '—'} label="दिहाड़ी" />
         </View>
 
         {/* Recent ratings */}
@@ -128,10 +129,10 @@ export default function WorkerProfile() {
   )
 }
 
-function StatBox({ emoji, value, label }: { emoji: string; value: string; label: string }) {
+function StatBox({ iconName, value, label }: { iconName: keyof typeof Ionicons.glyphMap; value: string; label: string }) {
   return (
     <View style={styles.statBox}>
-      <Text style={styles.statEmoji}>{emoji}</Text>
+      <Ionicons name={iconName} size={24} color={Colors.primary} />
       <Text style={styles.statValue}>{value}</Text>
       <Text style={styles.statLabel}>{label}</Text>
     </View>
@@ -142,22 +143,22 @@ function SettingsRow({ label, onPress, danger }: { label: string; onPress: () =>
   return (
     <TouchableOpacity onPress={onPress} style={styles.settingsRow}>
       <Text style={[styles.settingsLabel, danger && styles.settingsDanger]}>{label}</Text>
-      <Text style={styles.settingsArrow}>›</Text>
+      <Ionicons name="chevron-forward" size={20} color={Colors.textMuted} />
     </TouchableOpacity>
   )
 }
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: Colors.offWhite },
-  scroll: { padding: Spacing['2xl'], gap: Spacing.xl },
+  scroll: { padding: Spacing['2xl'], gap: Spacing.xl, paddingBottom: 120 },
 
   hero: { alignItems: 'center', gap: Spacing.sm, paddingVertical: Spacing.xl },
   avatar: {
     width: 88, height: 88, borderRadius: Radius.full,
     backgroundColor: Colors.primary, alignItems: 'center', justifyContent: 'center', ...Shadow.md,
   },
-  avatarText: { fontSize: 40, fontWeight: Typography.black, color: Colors.black },
-  name: { fontSize: Typography['2xl'], fontWeight: Typography.black, color: Colors.black },
+  avatarText: { fontSize: 40, fontWeight: Typography.black, color: Colors.white },
+  name: { fontSize: Typography['2xl'], fontWeight: Typography.black, color: Colors.textPrimary },
   phone: { fontSize: Typography.base, color: Colors.textMuted },
   skillBadge: {
     backgroundColor: Colors.primaryLight, paddingHorizontal: Spacing.base,

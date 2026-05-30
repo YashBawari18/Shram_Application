@@ -8,6 +8,7 @@ import { fetchBookingWithProfiles, markJobStarted, markJobCompleted } from '../.
 import { useBookingStore } from '../../../src/stores/bookingStore'
 import { Button } from '../../../src/components/ui/Button'
 import { Colors, Typography, Spacing, Radius, Shadow } from '../../../src/constants/theme'
+import { Ionicons } from '@expo/vector-icons'
 
 const STATUS_META: Record<string, { label: string; color: string; bg: string }> = {
   pending:   { label: 'इंतज़ार में', color: Colors.warning,  bg: Colors.warningLight },
@@ -55,8 +56,9 @@ export default function WorkerBookingDetail() {
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
-          <Text style={styles.backText}>← वापस</Text>
+        <TouchableOpacity onPress={() => router.back()} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+          <Ionicons name="arrow-back" size={20} color={Colors.textSecondary} />
+          <Text style={styles.backText}>वापस</Text>
         </TouchableOpacity>
         <View style={[styles.statusBadge, { backgroundColor: meta.bg }]}>
           <Text style={[styles.statusText, { color: meta.color }]}>{meta.label}</Text>
@@ -77,26 +79,29 @@ export default function WorkerBookingDetail() {
             onPress={() => router.push(`/(worker)/chat/${booking.id}` as any)}
             style={styles.chatBtn}
           >
-            <Text style={styles.chatBtnText}>💬 Chat</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+              <Ionicons name="chatbubble-outline" size={16} color={Colors.white} />
+              <Text style={styles.chatBtnText}>Chat</Text>
+            </View>
           </TouchableOpacity>
         </View>
 
         {/* Job details */}
         <View style={styles.detailCard}>
           <Text style={styles.detailTitle}>काम की जानकारी</Text>
-          <DetailRow icon="📍" label="जगह" value={booking.work_address} />
-          <DetailRow icon="🔧" label="हुनर" value={booking.skill_required} />
-          <DetailRow icon="💰" label="दिहाड़ी" value={`₹${booking.agreed_wage.toLocaleString('en-IN')} / दिन`} />
-          <DetailRow icon="📅" label="तारीख" value={new Date(booking.work_date).toLocaleDateString('hi-IN')} />
-          {booking.notes && <DetailRow icon="📝" label="नोट" value={booking.notes} />}
+          <DetailRow iconName="location-outline" label="जगह" value={booking.work_address} />
+          <DetailRow iconName="hammer-outline" label="हुनर" value={booking.skill_required} />
+          <DetailRow iconName="cash-outline" label="दिहाड़ी" value={`₹${booking.agreed_wage.toLocaleString('en-IN')} / दिन`} />
+          <DetailRow iconName="calendar-outline" label="तारीख" value={new Date(booking.work_date).toLocaleDateString('hi-IN')} />
+          {booking.notes && <DetailRow iconName="document-text-outline" label="नोट" value={booking.notes} />}
         </View>
 
         {/* Action buttons based on status */}
         {booking.status === 'accepted' && (
-          <Button label="▶ काम शुरू करें" onPress={() => handleAction('started')} loading={actionLoading} />
+          <Button label="काम शुरू करें" onPress={() => handleAction('started')} loading={actionLoading} />
         )}
         {booking.status === 'started' && (
-          <Button label="✓ काम पूरा हुआ" onPress={() => {
+          <Button label="काम पूरा हुआ" onPress={() => {
             Alert.alert('काम पूरा?', 'क्या आप वाकई काम पूरा करना चाहते हैं?', [
               { text: 'नहीं' },
               { text: 'हाँ, पूरा हुआ', onPress: () => handleAction('completed') },
@@ -105,7 +110,10 @@ export default function WorkerBookingDetail() {
         )}
         {booking.status === 'completed' && (
           <TouchableOpacity onPress={() => router.push(`/(worker)/rate/${booking.id}` as any)} style={styles.rateBtn}>
-            <Text style={styles.rateBtnText}>⭐ ठेकेदार को रेटिंग दें</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+              <Ionicons name="star" size={20} color={Colors.primary} />
+              <Text style={styles.rateBtnText}>ठेकेदार को रेटिंग दें</Text>
+            </View>
           </TouchableOpacity>
         )}
       </ScrollView>
@@ -113,10 +121,10 @@ export default function WorkerBookingDetail() {
   )
 }
 
-function DetailRow({ icon, label, value }: { icon: string; label: string; value: string }) {
+function DetailRow({ iconName, label, value }: { iconName: keyof typeof Ionicons.glyphMap; label: string; value: string }) {
   return (
     <View style={styles.detailRow}>
-      <Text style={styles.detailIcon}>{icon}</Text>
+      <Ionicons name={iconName} size={20} color={Colors.primary} style={{ width: 28 }} />
       <View style={styles.detailTexts}>
         <Text style={styles.detailLabel}>{label}</Text>
         <Text style={styles.detailValue}>{value}</Text>
@@ -133,13 +141,13 @@ const styles = StyleSheet.create({
   statusText: { fontSize: Typography.sm, fontWeight: Typography.bold },
   scroll: { padding: Spacing['2xl'], gap: Spacing.base },
   contractorCard: { flexDirection: 'row', alignItems: 'center', backgroundColor: Colors.offWhite, borderRadius: Radius.xl, padding: Spacing.base, gap: Spacing.md },
-  contractorAvatar: { width: 48, height: 48, borderRadius: Radius.full, backgroundColor: Colors.primaryLight, alignItems: 'center', justifyContent: 'center' },
-  contractorInitial: { fontSize: Typography.lg, fontWeight: Typography.bold, color: Colors.black },
+  contractorAvatar: { width: 48, height: 48, borderRadius: Radius.full, backgroundColor: Colors.primary, alignItems: 'center', justifyContent: 'center' },
+  contractorInitial: { fontSize: Typography.lg, fontWeight: Typography.bold, color: Colors.white },
   contractorInfo: { flex: 1 },
   contractorName: { fontSize: Typography.base, fontWeight: Typography.bold, color: Colors.textPrimary },
   contractorLabel: { fontSize: Typography.sm, color: Colors.textMuted },
   chatBtn: { backgroundColor: Colors.primary, paddingHorizontal: Spacing.md, paddingVertical: Spacing.sm, borderRadius: Radius.md },
-  chatBtnText: { fontSize: Typography.sm, fontWeight: Typography.bold, color: Colors.black },
+  chatBtnText: { fontSize: Typography.sm, fontWeight: Typography.bold, color: Colors.white },
   detailCard: { backgroundColor: Colors.offWhite, borderRadius: Radius.xl, padding: Spacing.xl, gap: Spacing.base },
   detailTitle: { fontSize: Typography.base, fontWeight: Typography.bold, color: Colors.textPrimary, marginBottom: Spacing.sm },
   detailRow: { flexDirection: 'row', gap: Spacing.md, alignItems: 'flex-start' },
@@ -147,6 +155,6 @@ const styles = StyleSheet.create({
   detailTexts: { flex: 1 },
   detailLabel: { fontSize: Typography.xs, color: Colors.textMuted },
   detailValue: { fontSize: Typography.base, color: Colors.textPrimary, fontWeight: Typography.medium },
-  rateBtn: { backgroundColor: Colors.primaryLight, borderRadius: Radius.xl, padding: Spacing.xl, alignItems: 'center', borderWidth: 2, borderColor: Colors.primary },
-  rateBtnText: { fontSize: Typography.base, fontWeight: Typography.bold, color: Colors.black },
+  rateBtn: { backgroundColor: Colors.surface, borderRadius: Radius.xl, padding: Spacing.xl, alignItems: 'center', borderWidth: 2, borderColor: Colors.primary },
+  rateBtnText: { fontSize: Typography.base, fontWeight: Typography.bold, color: Colors.primary },
 })

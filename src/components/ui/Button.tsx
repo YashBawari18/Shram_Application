@@ -6,8 +6,9 @@ import {
   StyleSheet,
   ViewStyle,
   TextStyle,
+  Platform,
 } from 'react-native'
-import { Colors, Typography, Spacing, Radius } from '../../constants/theme'
+import { Colors, Typography, Spacing, Radius } from '../../design/theme';
 
 type Variant = 'primary' | 'secondary' | 'ghost' | 'danger'
 type Size = 'sm' | 'md' | 'lg'
@@ -53,7 +54,7 @@ export function Button({
     >
       {loading ? (
         <ActivityIndicator
-          color={variant === 'primary' ? Colors.textOnYellow : Colors.primary}
+          color={variant === 'primary' ? Colors.black : Colors.accent}
           size="small"
         />
       ) : (
@@ -80,9 +81,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary,
   },
   variant_secondary: {
-    backgroundColor: Colors.surfaceSecondary,
-    borderWidth: 1,
-    borderColor: Colors.border,
+    backgroundColor: Colors.surface,
+    borderWidth: 1.5,
+    borderColor: Colors.primary,
   },
   variant_ghost: {
     backgroundColor: 'transparent',
@@ -92,17 +93,18 @@ const styles = StyleSheet.create({
   },
 
   // Sizes
-  size_sm: { height: 36, paddingHorizontal: Spacing.md },
-  size_md: { height: 44, paddingHorizontal: Spacing.lg },
-  size_lg: { height: 54, paddingHorizontal: Spacing.xl },
+  size_sm: { height: 38, paddingHorizontal: Spacing.md, borderRadius: Radius.lg },
+  size_md: { height: 46, paddingHorizontal: Spacing.lg, borderRadius: Radius.xl },
+  size_lg: { height: 56, paddingHorizontal: Spacing.xl, borderRadius: Radius.xl },
 
   // Labels
   label: {
-    fontWeight: Typography.bold,
-    letterSpacing: 0.3,
+    fontFamily: Platform.OS === 'ios' ? 'System' : 'sans-serif-medium',
+    fontWeight: Typography.semibold,
+    letterSpacing: 0.2,
   },
-  label_primary: { color: Colors.textOnYellow },
-  label_secondary: { color: Colors.textPrimary },
+  label_primary: { color: Colors.white },
+  label_secondary: { color: Colors.primary },
   label_ghost: { color: Colors.primary },
   label_danger: { color: Colors.white },
 
@@ -110,3 +112,4 @@ const styles = StyleSheet.create({
   labelSize_md: { fontSize: Typography.base },
   labelSize_lg: { fontSize: Typography.md },
 })
+

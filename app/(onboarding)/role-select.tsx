@@ -12,6 +12,7 @@ import { useAuthStore } from '../../src/stores/authStore'
 import { UserRole } from '../../src/types/app'
 import { Button } from '../../src/components/ui/Button'
 import { Colors, Typography, Spacing, Radius, Shadow } from '../../src/constants/theme'
+import { Ionicons } from '@expo/vector-icons'
 
 export default function RoleSelectScreen() {
   const { session, loadProfile } = useAuthStore()
@@ -51,7 +52,7 @@ export default function RoleSelectScreen() {
             role="worker"
             selected={selected === 'worker'}
             onSelect={() => setSelected('worker')}
-            emoji="👷"
+            iconName="person-outline"
             title="मज़दूर हूं"
             titleEn="Worker"
             description="मुझे रोज़ काम चाहिए\nपेंटर, मिस्त्री, हेल्पर..."
@@ -60,7 +61,7 @@ export default function RoleSelectScreen() {
             role="contractor"
             selected={selected === 'contractor'}
             onSelect={() => setSelected('contractor')}
-            emoji="🏗️"
+            iconName="business-outline"
             title="ठेकेदार हूं"
             titleEn="Contractor / Hirer"
             description="मुझे मज़दूर चाहिए\nसाइट सुपरवाइज़र, बिल्डर..."
@@ -68,7 +69,7 @@ export default function RoleSelectScreen() {
         </View>
 
         <Button
-          label="आगे बढ़ें →"
+          label="आगे बढ़ें"
           onPress={handleContinue}
           loading={loading}
           disabled={!selected}
@@ -82,21 +83,25 @@ interface RoleCardProps {
   role: UserRole
   selected: boolean
   onSelect: () => void
-  emoji: string
+  iconName: keyof typeof Ionicons.glyphMap
   title: string
   titleEn: string
   description: string
 }
 
-function RoleCard({ selected, onSelect, emoji, title, titleEn, description }: RoleCardProps) {
+function RoleCard({ selected, onSelect, iconName, title, titleEn, description }: RoleCardProps) {
   return (
     <TouchableOpacity
       onPress={onSelect}
       activeOpacity={0.85}
       style={[styles.card, selected && styles.cardSelected]}
     >
-      {selected && <View style={styles.checkBadge}><Text style={styles.checkText}>✓</Text></View>}
-      <Text style={styles.cardEmoji}>{emoji}</Text>
+      {selected && (
+        <View style={styles.checkBadge}>
+          <Ionicons name="checkmark" size={16} color={Colors.white} />
+        </View>
+      )}
+      <Ionicons name={iconName} size={48} color={selected ? Colors.primary : Colors.textMuted} style={{ marginBottom: Spacing.md }} />
       <Text style={styles.cardTitle}>{title}</Text>
       <Text style={styles.cardTitleEn}>{titleEn}</Text>
       <Text style={styles.cardDesc}>{description}</Text>
@@ -127,7 +132,7 @@ const styles = StyleSheet.create({
   logoText: {
     fontSize: 28,
     fontWeight: Typography.black,
-    color: Colors.black,
+    color: Colors.white,
   },
   title: {
     fontSize: Typography['2xl'],
@@ -175,7 +180,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  checkText: { fontSize: 16, fontWeight: Typography.bold, color: Colors.black },
+  checkText: { fontSize: 16, fontWeight: Typography.bold, color: Colors.white },
 
   cardEmoji: { fontSize: 48, marginBottom: Spacing.md },
   cardTitle: {

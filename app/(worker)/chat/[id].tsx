@@ -8,6 +8,7 @@ import { useAuthStore } from '../../../src/stores/authStore'
 import { useChat } from '../../../src/hooks/useChat'
 import { Colors, Typography, Spacing, Radius } from '../../../src/constants/theme'
 import { Message } from '../../../src/types/app'
+import { Ionicons } from '@expo/vector-icons'
 
 const QUICK_REPLIES = [
   'ठीक है 👍',
@@ -38,12 +39,13 @@ export default function ChatScreen() {
       <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         {/* Header */}
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
-            <Text style={styles.backText}>←</Text>
+          <TouchableOpacity onPress={() => router.back()} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+            <Ionicons name="arrow-back" size={20} color={Colors.textSecondary} />
+            <Text style={styles.backText}>वापस</Text>
           </TouchableOpacity>
-          <View>
-            <Text style={styles.headerTitle}>Chat</Text>
-            <Text style={styles.headerSub}>Booking #{id.slice(0, 8)}</Text>
+          <View style={{ marginLeft: Spacing.sm }}>
+            <Text style={styles.headerTitle}>मैसेज</Text>
+            <Text style={styles.headerSub}>बुकिंग #{id.slice(0, 8)}</Text>
           </View>
         </View>
 
@@ -62,7 +64,8 @@ export default function ChatScreen() {
             onLayout={() => flatListRef.current?.scrollToEnd()}
             ListEmptyComponent={
               <View style={styles.emptyChat}>
-                <Text style={styles.emptyChatText}>💬 बात शुरू करें</Text>
+                <Ionicons name="chatbubbles-outline" size={48} color={Colors.textMuted} style={{ marginBottom: Spacing.sm }} />
+                <Text style={styles.emptyChatText}>बात शुरू करें</Text>
               </View>
             }
           />
@@ -95,7 +98,7 @@ export default function ChatScreen() {
             style={[styles.sendBtn, !input.trim() && styles.sendBtnDisabled]}
             disabled={!input.trim()}
           >
-            <Text style={styles.sendIcon}>➤</Text>
+            <Ionicons name="send" size={16} color={Colors.white} />
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
@@ -119,8 +122,8 @@ const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: Colors.white },
   flex: { flex: 1 },
   header: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: Spacing['2xl'], paddingTop: Spacing.xl, paddingBottom: Spacing.base, borderBottomWidth: 1, borderBottomColor: Colors.borderLight, gap: Spacing.base },
-  backBtn: { width: 32 },
-  backText: { fontSize: Typography.xl, color: Colors.textPrimary },
+  backBtn: {},
+  backText: { fontSize: Typography.base, color: Colors.textSecondary, fontWeight: Typography.medium },
   headerTitle: { fontSize: Typography.base, fontWeight: Typography.bold, color: Colors.textPrimary },
   headerSub: { fontSize: Typography.xs, color: Colors.textMuted },
   loadingBox: { flex: 1, alignItems: 'center', justifyContent: 'center' },
@@ -132,9 +135,9 @@ const styles = StyleSheet.create({
   bubble: { maxWidth: '78%', backgroundColor: Colors.offWhite, borderRadius: Radius.lg, borderBottomLeftRadius: 4, paddingHorizontal: Spacing.md, paddingVertical: Spacing.sm, gap: 4 },
   bubbleMe: { backgroundColor: Colors.primary, borderBottomLeftRadius: Radius.lg, borderBottomRightRadius: 4 },
   bubbleText: { fontSize: Typography.base, color: Colors.textPrimary, lineHeight: Typography.base * 1.4 },
-  bubbleTextMe: { color: Colors.black },
+  bubbleTextMe: { color: Colors.white },
   bubbleTime: { fontSize: 10, color: Colors.textMuted, alignSelf: 'flex-end' },
-  bubbleTimeMe: { color: 'rgba(0,0,0,0.5)' },
+  bubbleTimeMe: { color: 'rgba(255,255,255,0.7)' },
   quickReplies: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.sm, paddingHorizontal: Spacing.base, paddingVertical: Spacing.sm, borderTopWidth: 1, borderTopColor: Colors.borderLight },
   quickChip: { backgroundColor: Colors.surfaceSecondary, paddingHorizontal: Spacing.md, paddingVertical: Spacing.xs, borderRadius: Radius.full, borderWidth: 1, borderColor: Colors.border },
   quickText: { fontSize: Typography.sm, color: Colors.textSecondary },

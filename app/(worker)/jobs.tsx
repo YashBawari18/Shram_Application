@@ -4,6 +4,7 @@ import {
   TouchableOpacity, ActivityIndicator,
 } from 'react-native'
 import { router } from 'expo-router'
+import { Ionicons } from '@expo/vector-icons'
 import { supabase } from '../../src/lib/supabase'
 import { useAuthStore } from '../../src/stores/authStore'
 import { Colors, Typography, Spacing, Radius, Shadow } from '../../src/constants/theme'
@@ -96,7 +97,7 @@ export default function WorkerJobs() {
                     </Text>
                   </View>
                 </View>
-                <Text style={styles.cardAddress} numberOfLines={1}>📍 {item.work_address}</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}><Ionicons name="location-outline" size={14} color={Colors.textSecondary} /><Text style={styles.cardAddress} numberOfLines={1}>{item.work_address}</Text></View>
                 <View style={styles.cardBottom}>
                   <Text style={styles.cardWage}>₹{item.agreed_wage.toLocaleString('en-IN')}/दिन</Text>
                   <Text style={styles.cardDate}>{new Date(item.work_date).toLocaleDateString('hi-IN')}</Text>
@@ -106,7 +107,7 @@ export default function WorkerJobs() {
           }}
           ListEmptyComponent={
             <View style={styles.empty}>
-              <Text style={styles.emptyEmoji}>📋</Text>
+              <Ionicons name="document-text-outline" size={48} color={Colors.textMuted} />
               <Text style={styles.emptyText}>कोई काम नहीं मिला</Text>
             </View>
           }
@@ -124,8 +125,8 @@ const styles = StyleSheet.create({
   filterTab: { flex: 1, paddingVertical: Spacing.sm, borderRadius: Radius.md, alignItems: 'center', backgroundColor: Colors.surfaceSecondary },
   filterTabActive: { backgroundColor: Colors.primary },
   filterTabText: { fontSize: Typography.sm, fontWeight: Typography.medium, color: Colors.textSecondary },
-  filterTabTextActive: { color: Colors.black, fontWeight: Typography.bold },
-  list: { padding: Spacing.base, gap: Spacing.sm },
+  filterTabTextActive: { color: Colors.white, fontWeight: Typography.bold },
+  list: { padding: Spacing.base, gap: Spacing.sm, paddingBottom: 100 },
   card: { backgroundColor: Colors.white, borderRadius: Radius.xl, padding: Spacing.xl, gap: Spacing.sm, ...Shadow.sm },
   cardTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   cardSkill: { fontSize: Typography.base, fontWeight: Typography.bold, color: Colors.textPrimary },

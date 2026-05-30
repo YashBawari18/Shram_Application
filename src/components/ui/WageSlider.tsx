@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import Slider from '@react-native-community/slider'
-import { Colors, Typography, Spacing, Radius } from '../../constants/theme'
+import { Colors, Typography, Spacing, Radius } from '../../design/theme';
 
 interface WageSliderProps {
   value: number
@@ -79,16 +79,16 @@ const styles = StyleSheet.create({
   rupee: {
     fontSize: Typography['2xl'],
     fontWeight: Typography.bold,
-    color: Colors.black,
+    color: Colors.white,
   },
   amount: {
     fontSize: Typography['3xl'],
     fontWeight: Typography.black,
-    color: Colors.black,
+    color: Colors.white,
   },
   perDay: {
     fontSize: Typography.base,
-    color: Colors.textSecondary,
+    color: Colors.border,
     fontWeight: Typography.medium,
   },
   slider: { width: '100%', height: 40 },

@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import { NearbyWorker } from '../../types/app'
 import { getSkillLabel } from '../../constants/skills'
-import { Colors, Typography, Spacing, Radius, Shadow } from '../../constants/theme'
+import { Colors, Typography, Spacing, Radius, Shadow } from '../../design/theme'
 
 interface WorkerCardProps {
   worker: NearbyWorker
@@ -73,8 +73,8 @@ const styles = StyleSheet.create({
     padding: Spacing.base,
     marginBottom: Spacing.sm,
     ...Shadow.sm,
-    borderWidth: 0.5,
-    borderColor: Colors.borderLight,
+    borderWidth: 1,
+    borderColor: Colors.border,
     gap: Spacing.md,
   },
   avatarBox: { position: 'relative' },
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primaryLight,
     alignItems: 'center', justifyContent: 'center',
   },
-  avatarInitial: { fontSize: Typography.xl, fontWeight: Typography.bold, color: Colors.black },
+  avatarInitial: { fontSize: Typography.xl, fontWeight: Typography.bold, color: Colors.white },
   onlineDot: {
     position: 'absolute', bottom: 2, right: 2,
     width: 12, height: 12, borderRadius: Radius.full,
@@ -97,17 +97,18 @@ const styles = StyleSheet.create({
   skill: { fontSize: Typography.sm, color: Colors.textSecondary, fontWeight: Typography.medium },
   dot: { color: Colors.textMuted },
   distance: { fontSize: Typography.sm, color: Colors.textMuted },
-  stars: { fontSize: 11, color: Colors.primary, letterSpacing: 1 },
+  stars: { fontSize: 11, color: Colors.accent, letterSpacing: 1 },
   ratingText: { fontSize: Typography.xs, color: Colors.textMuted },
   right: { alignItems: 'flex-end', gap: 2 },
-  wage: { fontSize: Typography.lg, fontWeight: Typography.black, color: Colors.black },
+  wage: { fontSize: Typography.lg, fontWeight: Typography.black, color: Colors.textPrimary },
   perDay: { fontSize: Typography.xs, color: Colors.textMuted },
   hireBtn: {
     marginTop: Spacing.xs,
     backgroundColor: Colors.primary,
     paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.sm,
-    borderRadius: Radius.md,
+    borderRadius: Radius.lg,
   },
-  hireBtnText: { fontSize: Typography.sm, fontWeight: Typography.bold, color: Colors.black },
+  hireBtnText: { fontSize: Typography.sm, fontWeight: Typography.semibold, color: Colors.white },
 })
+

@@ -8,6 +8,7 @@ import { fetchBookingWithProfiles } from '../../../src/lib/booking'
 import { useBookingStore } from '../../../src/stores/bookingStore'
 import { Button } from '../../../src/components/ui/Button'
 import { Colors, Typography, Spacing, Radius } from '../../../src/constants/theme'
+import { Ionicons } from '@expo/vector-icons'
 
 export default function ContractorBookingDetail() {
   const { id } = useLocalSearchParams<{ id: string }>()
@@ -48,10 +49,11 @@ export default function ContractorBookingDetail() {
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
-          <Text style={styles.back}>← वापस</Text>
+        <TouchableOpacity onPress={() => router.back()} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+          <Ionicons name="arrow-back" size={20} color={Colors.textSecondary} />
+          <Text style={styles.back}>वापस</Text>
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Booking Detail</Text>
+        <Text style={styles.headerTitle}>बुकिंग विवरण</Text>
         <View style={{ width: 60 }} />
       </View>
 
@@ -69,22 +71,25 @@ export default function ContractorBookingDetail() {
             onPress={() => router.push(`/(contractor)/chat/${booking.id}` as any)}
             style={styles.chatBtn}
           >
-            <Text style={styles.chatBtnText}>💬 Chat</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+              <Ionicons name="chatbubble-outline" size={16} color={Colors.white} />
+              <Text style={styles.chatBtnText}>Chat</Text>
+            </View>
           </TouchableOpacity>
         </View>
 
         {/* Details */}
         <View style={styles.detailCard}>
-          <Row icon="💰" label="दिहाड़ी" value={`₹${booking.agreed_wage.toLocaleString('en-IN')} / दिन`} />
-          <Row icon="📍" label="पता" value={booking.work_address} />
-          <Row icon="📅" label="तारीख" value={new Date(booking.work_date).toLocaleDateString('hi-IN')} />
-          <Row icon="🔧" label="हुनर" value={booking.skill_required} />
-          {booking.notes && <Row icon="📝" label="नोट" value={booking.notes} />}
-          <Row icon="🔄" label="Status" value={booking.status.toUpperCase()} />
+          <Row iconName="cash-outline" label="दिहाड़ी" value={`₹${booking.agreed_wage.toLocaleString('en-IN')} / दिन`} />
+          <Row iconName="location-outline" label="पता" value={booking.work_address} />
+          <Row iconName="calendar-outline" label="तारीख" value={new Date(booking.work_date).toLocaleDateString('hi-IN')} />
+          <Row iconName="hammer-outline" label="हुनर" value={booking.skill_required} />
+          {booking.notes && <Row iconName="document-text-outline" label="नोट" value={booking.notes} />}
+          <Row iconName="sync-outline" label="Status" value={booking.status.toUpperCase()} />
         </View>
 
         {canCancel && (
-          <Button label="✗ बुकिंग रद्द करें" onPress={handleCancel} variant="danger" loading={cancelling} />
+          <Button label="बुकिंग रद्द करें" onPress={handleCancel} variant="danger" loading={cancelling} />
         )}
 
         {booking.status === 'completed' && (
@@ -92,7 +97,10 @@ export default function ContractorBookingDetail() {
             onPress={() => router.push(`/(contractor)/rate/${booking.id}` as any)}
             style={styles.rateBtn}
           >
-            <Text style={styles.rateBtnText}>⭐ मज़दूर को रेटिंग दें</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+              <Ionicons name="star" size={20} color={Colors.primary} />
+              <Text style={styles.rateBtnText}>मज़दूर को रेटिंग दें</Text>
+            </View>
           </TouchableOpacity>
         )}
       </ScrollView>
@@ -100,10 +108,10 @@ export default function ContractorBookingDetail() {
   )
 }
 
-function Row({ icon, label, value }: { icon: string; label: string; value: string }) {
+function Row({ iconName, label, value }: { iconName: keyof typeof Ionicons.glyphMap; label: string; value: string }) {
   return (
     <View style={styles.row}>
-      <Text style={styles.rowIcon}>{icon}</Text>
+      <Ionicons name={iconName} size={20} color={Colors.primary} style={{ width: 28 }} />
       <View style={styles.rowTexts}>
         <Text style={styles.rowLabel}>{label}</Text>
         <Text style={styles.rowValue}>{value}</Text>
@@ -119,19 +127,19 @@ const styles = StyleSheet.create({
   headerTitle: { fontSize: Typography.base, fontWeight: Typography.bold, color: Colors.textPrimary },
   scroll: { padding: Spacing['2xl'], gap: Spacing.base },
   workerCard: { flexDirection: 'row', alignItems: 'center', backgroundColor: Colors.offWhite, borderRadius: Radius.xl, padding: Spacing.base, gap: Spacing.md },
-  workerAvatar: { width: 48, height: 48, borderRadius: Radius.full, backgroundColor: Colors.primaryLight, alignItems: 'center', justifyContent: 'center' },
-  workerInitial: { fontSize: Typography.lg, fontWeight: Typography.bold, color: Colors.black },
+  workerAvatar: { width: 48, height: 48, borderRadius: Radius.full, backgroundColor: Colors.primary, alignItems: 'center', justifyContent: 'center' },
+  workerInitial: { fontSize: Typography.lg, fontWeight: Typography.bold, color: Colors.white },
   workerInfo: { flex: 1 },
   workerName: { fontSize: Typography.base, fontWeight: Typography.bold, color: Colors.textPrimary },
   workerSkill: { fontSize: Typography.sm, color: Colors.textMuted },
   chatBtn: { backgroundColor: Colors.primary, paddingHorizontal: Spacing.md, paddingVertical: Spacing.sm, borderRadius: Radius.md },
-  chatBtnText: { fontSize: Typography.sm, fontWeight: Typography.bold, color: Colors.black },
+  chatBtnText: { fontSize: Typography.sm, fontWeight: Typography.bold, color: Colors.white },
   detailCard: { backgroundColor: Colors.offWhite, borderRadius: Radius.xl, padding: Spacing.xl, gap: Spacing.base },
   row: { flexDirection: 'row', gap: Spacing.md, alignItems: 'flex-start' },
   rowIcon: { fontSize: 20, width: 28 },
   rowTexts: { flex: 1 },
   rowLabel: { fontSize: Typography.xs, color: Colors.textMuted },
   rowValue: { fontSize: Typography.base, color: Colors.textPrimary, fontWeight: Typography.medium },
-  rateBtn: { backgroundColor: Colors.primaryLight, borderRadius: Radius.xl, padding: Spacing.xl, alignItems: 'center', borderWidth: 2, borderColor: Colors.primary },
-  rateBtnText: { fontSize: Typography.base, fontWeight: Typography.bold, color: Colors.black },
+  rateBtn: { backgroundColor: Colors.surface, borderRadius: Radius.xl, padding: Spacing.xl, alignItems: 'center', borderWidth: 2, borderColor: Colors.primary },
+  rateBtnText: { fontSize: Typography.base, fontWeight: Typography.bold, color: Colors.primary },
 })

@@ -8,14 +8,15 @@ import { supabase } from '../../src/lib/supabase'
 import { useAuthStore } from '../../src/stores/authStore'
 import { Colors, Typography, Spacing, Radius, Shadow } from '../../src/constants/theme'
 import { BookingStatus } from '../../src/types/app'
+import { Ionicons } from '@expo/vector-icons'
 
-const STATUS_LABELS: Record<BookingStatus, string> = {
-  pending:   '⏳ Pending',
-  accepted:  '✓ Accepted',
-  started:   '⚙️ In Progress',
-  completed: '✅ Completed',
-  rejected:  '✗ Rejected',
-  cancelled: '✗ Cancelled',
+const STATUS_LABELS: Record<BookingStatus, { label: string; icon: keyof typeof Ionicons.glyphMap }> = {
+  pending:   { label: 'Pending', icon: 'time-outline' },
+  accepted:  { label: 'Accepted', icon: 'checkmark-circle-outline' },
+  started:   { label: 'In Progress', icon: 'git-branch-outline' },
+  completed: { label: 'Completed', icon: 'checkmark-done-circle-outline' },
+  rejected:  { label: 'Rejected', icon: 'close-circle-outline' },
+  cancelled: { label: 'Cancelled', icon: 'ban-outline' },
 }
 
 const STATUS_COLORS: Record<BookingStatus, string> = {
@@ -86,26 +87,32 @@ export default function ContractorBookings() {
             >
               <View style={styles.cardTop}>
                 <Text style={styles.workerName}>{item.worker?.name ?? 'Worker'}</Text>
-                <Text style={[styles.status, { color: STATUS_COLORS[item.status as BookingStatus] }]}>
-                  {STATUS_LABELS[item.status as BookingStatus]}
-                </Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                  <Ionicons name={STATUS_LABELS[item.status as BookingStatus].icon} size={14} color={STATUS_COLORS[item.status as BookingStatus]} />
+                  <Text style={[styles.status, { color: STATUS_COLORS[item.status as BookingStatus] }]}>
+                    {STATUS_LABELS[item.status as BookingStatus].label}
+                  </Text>
+                </View>
               </View>
               <Text style={styles.skill}>{item.skill_required}</Text>
-              <Text style={styles.address} numberOfLines={1}>📍 {item.work_address}</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}><Ionicons name="location-outline" size={14} color={Colors.textSecondary} /><Text style={styles.address} numberOfLines={1}>{item.work_address}</Text></View>
               <View style={styles.cardBottom}>
                 <Text style={styles.wage}>₹{item.agreed_wage.toLocaleString('en-IN')}/दिन</Text>
                 <TouchableOpacity
                   onPress={() => router.push(`/(contractor)/chat/${item.id}` as any)}
                   style={styles.chatBtn}
                 >
-                  <Text style={styles.chatBtnText}>💬 Chat</Text>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                    <Ionicons name="chatbubble-outline" size={14} color={Colors.white} />
+                    <Text style={styles.chatBtnText}>Chat</Text>
+                  </View>
                 </TouchableOpacity>
               </View>
             </TouchableOpacity>
           )}
           ListEmptyComponent={
             <View style={styles.empty}>
-              <Text style={styles.emptyEmoji}>📋</Text>
+              <Ionicons name="document-text-outline" size={48} color={Colors.textMuted} />
               <Text style={styles.emptyText}>कोई बुकिंग नहीं</Text>
             </View>
           }
@@ -123,7 +130,7 @@ const styles = StyleSheet.create({
   tab: { flex: 1, paddingVertical: Spacing.sm, borderRadius: Radius.md, alignItems: 'center', backgroundColor: Colors.surfaceSecondary },
   tabActive: { backgroundColor: Colors.primary },
   tabText: { fontSize: Typography.sm, fontWeight: Typography.medium, color: Colors.textSecondary },
-  tabTextActive: { color: Colors.black, fontWeight: Typography.bold },
+  tabTextActive: { color: Colors.white, fontWeight: Typography.bold },
   list: { padding: Spacing.base, gap: Spacing.sm },
   card: { backgroundColor: Colors.white, borderRadius: Radius.xl, padding: Spacing.xl, gap: Spacing.sm, ...Shadow.sm },
   cardTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
@@ -133,8 +140,8 @@ const styles = StyleSheet.create({
   address: { fontSize: Typography.sm, color: Colors.textMuted },
   cardBottom: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: Spacing.xs },
   wage: { fontSize: Typography.lg, fontWeight: Typography.black, color: Colors.black },
-  chatBtn: { backgroundColor: Colors.primaryLight, paddingHorizontal: Spacing.base, paddingVertical: Spacing.xs, borderRadius: Radius.md },
-  chatBtnText: { fontSize: Typography.sm, fontWeight: Typography.semibold, color: Colors.black },
+  chatBtn: { backgroundColor: Colors.primary, paddingHorizontal: Spacing.base, paddingVertical: Spacing.xs, borderRadius: Radius.md },
+  chatBtnText: { fontSize: Typography.sm, fontWeight: Typography.semibold, color: Colors.white },
   empty: { alignItems: 'center', paddingTop: Spacing['4xl'], gap: Spacing.sm },
   emptyEmoji: { fontSize: 48 },
   emptyText: { fontSize: Typography.base, color: Colors.textMuted },
