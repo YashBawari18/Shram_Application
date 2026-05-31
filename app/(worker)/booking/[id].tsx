@@ -43,7 +43,7 @@ export default function WorkerBookingDetail() {
     setActionLoading(false)
 
     if (action === 'completed') {
-      router.push(`/(worker)/rate/${id}` as any)
+      router.push(`/(worker)/rate/${id}?rateeId=${updated?.contractor_id}` as any)
     }
   }
 
@@ -109,7 +109,7 @@ export default function WorkerBookingDetail() {
           }} loading={actionLoading} />
         )}
         {booking.status === 'completed' && (
-          <TouchableOpacity onPress={() => router.push(`/(worker)/rate/${booking.id}` as any)} style={styles.rateBtn}>
+          <TouchableOpacity onPress={() => router.push(`/(worker)/rate/${booking.id}?rateeId=${booking.contractor_id}` as any)} style={styles.rateBtn}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
               <Ionicons name="star" size={20} color={Colors.primary} />
               <Text style={styles.rateBtnText}>ठेकेदार को रेटिंग दें</Text>

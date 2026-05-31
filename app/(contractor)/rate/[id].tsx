@@ -6,7 +6,6 @@ import {
 import { useLocalSearchParams, router } from 'expo-router'
 import { supabase } from '../../../src/lib/supabase'
 import { useAuthStore } from '../../../src/stores/authStore'
-import { fetchBookingWithProfiles } from '../../../src/lib/booking'
 import { Button } from '../../../src/components/ui/Button'
 import { Colors, Typography, Spacing, Radius } from '../../../src/constants/theme'
 import { Ionicons } from '@expo/vector-icons'
@@ -14,7 +13,7 @@ import { Ionicons } from '@expo/vector-icons'
 const LABELS = ['', 'बहुत खराब', 'खराब', 'ठीक है', 'अच्छा', 'बहुत अच्छा']
 
 export default function ContractorRateScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>()
+  const { id, rateeId } = useLocalSearchParams<{ id: string; rateeId: string }>()
   const { session } = useAuthStore()
   const [score, setScore] = useState(0)
   const [comment, setComment] = useState('')
@@ -22,19 +21,18 @@ export default function ContractorRateScreen() {
 
   async function handleSubmit() {
     if (score === 0) { Alert.alert('रेटिंग दें', 'कृपया एक स्टार चुनें।'); return }
-    setLoading(true)
-
-    const booking = await fetchBookingWithProfiles(id)
-    if (!booking) { setLoading(false); return }
 
     const userId = session?.user?.id
     if (!userId) {
       Alert.alert('त्रुटि', 'लॉगिन आवश्यक है।')
-      setLoading(false)
       return
     }
-    const rateeId = booking.worker_id
+    if (!rateeId) {
+      Alert.alert('त्रुटि', 'मज़दूर की जानकारी नहीं मिली।')
+      return
+    }
 
+    setLoading(true)
     const { error } = await supabase.from('ratings').insert({
       booking_id: id,
       rater_id: userId,
@@ -42,8 +40,8 @@ export default function ContractorRateScreen() {
       score,
       comment: comment.trim() || null,
     })
-
     setLoading(false)
+
     if (error && !error.message.includes('duplicate')) {
       Alert.alert('Error', error.message)
       return

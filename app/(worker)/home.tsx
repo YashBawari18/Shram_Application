@@ -128,9 +128,9 @@ export default function WorkerHome() {
         )}
 
         <View style={styles.statsRow}>
-          <StatCard iconName="star-outline" label="रेटिंग" value="—" />
-          <StatCard iconName="briefcase-outline" label="कुल काम" value="0" />
-          <StatCard iconName="wallet-outline" label="कमाई" value="₹0" />
+          <StatCard key="rating" iconName="star-outline" label="रेटिंग" value="—" />
+          <StatCard key="jobs" iconName="briefcase-outline" label="कुल काम" value="0" />
+          <StatCard key="earnings" iconName="wallet-outline" label="कमाई" value="₹0" />
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -153,7 +153,7 @@ function BookingRequestCard({ booking }: { booking: InstantBooking }) {
         <View style={styles.timerBadge}><Ionicons name="timer-outline" size={12} color={Colors.warning} /><Text style={styles.timerText}> {timeLeft}s</Text></View>
       </View>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}><Ionicons name="location-outline" size={14} color={Colors.textSecondary} /><Text style={styles.requestAddress}>{booking.work_address}</Text></View>
-      <Text style={styles.requestWage}>₹{booking.agreed_wage.toLocaleString('en-IN')} / दिन</Text>
+      <Text style={styles.requestWage}>₹{(booking.agreed_wage ?? 0).toLocaleString('en-IN')} / दिन</Text>
       {booking.notes ? <Text style={styles.requestNotes}>"{booking.notes}"</Text> : null}
       <View style={styles.requestBtns}>
         <Button label="मना करें" onPress={() => handle('rejected')} variant="secondary" size="md" fullWidth={false} style={styles.rejectBtn} loading={loading === 'reject'} />
@@ -170,7 +170,7 @@ function ActiveJobCard({ booking }: { booking: InstantBooking }) {
         <Text style={styles.activeBadgeText}>{booking.status === 'accepted' ? 'CONFIRMED' : 'IN PROGRESS'}</Text>
       </View>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}><Ionicons name="location-outline" size={14} color={Colors.border} /><Text style={styles.activeAddress}>{booking.work_address}</Text></View>
-      <Text style={styles.activeWage}>₹{booking.agreed_wage.toLocaleString('en-IN')} / दिन</Text>
+      <Text style={styles.activeWage}>₹{(booking.agreed_wage ?? 0).toLocaleString('en-IN')} / दिन</Text>
       <Text style={styles.activeTap}>Details देखें →</Text>
     </TouchableOpacity>
   )

@@ -94,7 +94,7 @@ export default function ContractorBookingDetail() {
 
         {booking.status === 'completed' && (
           <TouchableOpacity
-            onPress={() => router.push(`/(contractor)/rate/${booking.id}` as any)}
+            onPress={() => router.push(`/(contractor)/rate/${booking.id}?rateeId=${booking.worker_id}` as any)}
             style={styles.rateBtn}
           >
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
